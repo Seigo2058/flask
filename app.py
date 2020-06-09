@@ -13,7 +13,8 @@ def hello(text):
 
 @app.route("/sample/<text>")
 def scholl(school_name):
-    return "学校名は"+ school_name + "です"
+    school_name = "oasa"
+    return render_template("test2.html",school_name = name)
 
 
 if __name__ == "__main__":

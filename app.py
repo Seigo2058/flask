@@ -11,6 +11,10 @@ def index():
 def hello(text):
     return text + "さん、こんにちは"
 
+@app.route("/sample/<text>")
+def scholl(name):
+    return "学校名は"+ name + "です"
+
 
 if __name__ == "__main__":
     #サーバーを起動するよ

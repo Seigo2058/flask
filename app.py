@@ -4,7 +4,13 @@ app = Flask(__name__)
 
 @app.route("/test")
 def index():
-    return render_template("test.html")
+    name = "flask"
+    return render_template("test.html",name = name)
+
+@app.route("/greet/<text>")
+def hello(text):
+    return text + "さん、こんにちは"
+
 
 if __name__ == "__main__":
     #サーバーを起動するよ

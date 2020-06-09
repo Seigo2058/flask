@@ -12,8 +12,8 @@ def hello(text):
     return text + "さん、こんにちは"
 
 @app.route("/sample/<text>")
-def scholl(name):
-    return "学校名は"+ name + "です"
+def scholl(school_name):
+    return "学校名は"+ school_name + "です"
 
 
 if __name__ == "__main__":

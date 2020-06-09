@@ -14,7 +14,7 @@ def hello(text):
 @app.route("/sample/<text>")
 def scholl(school_name):
     school_name = "oasa"
-    return render_template("test2.html",school_name = name)
+    return render_template("test2.html",school_name = school_name)
 
 
 if __name__ == "__main__":

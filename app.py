@@ -16,6 +16,10 @@ def hello(text):
 #     school_name = "oasa"
 #     return render_template("test2.html",school_name = school_name)
 
+@app.errorhandler(404)
+def notfound(code):
+    return "404ペーーーーージ"
+
 
 if __name__ == "__main__":
     #サーバーを起動するよ

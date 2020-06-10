@@ -46,6 +46,27 @@ def dbtest():
     return render_template("dbtest.html", user_info = user_info)
 
 
+#データベースを追加
+@app.route("/add")
+def add():
+    return render_template("add.html")
+
+#データを追加するボタンの処理
+@app.route("/add",methords=["POST"])
+def add_post():
+    #add.htmlからfromのname="task"を取得
+    task=request.from.get("task")
+    #データベースに接続
+    conn=sqlite3.connect("flask.db")
+    c=conn.cursor()
+    #(task,)のカンマは忘れずにね!ダブル型なので!
+    #?に(task,)が入るよ
+    #insert intoはデータを追加
+    c.execute("insert into task values(null,?)",(task,))
+    conn.commit()
+    c.close()
+    return "データを更新できました！"
+
 
 
 

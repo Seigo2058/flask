@@ -1,7 +1,7 @@
 #sqlite3を使えるようにする
 import sqlite3
 
-from flask import Flask , render_template
+from flask import Flask , render_template , request
 #flaskのflask,render_templateを使用します宣言
 app = Flask(__name__)
 
@@ -55,7 +55,7 @@ def add():
 @app.route("/add",methords=["POST"])
 def add_post():
     #add.htmlからfromのname="task"を取得
-    task=request.from.get("task")
+    task = request.form.get("task")
     #データベースに接続
     conn=sqlite3.connect("flask.db")
     c=conn.cursor()

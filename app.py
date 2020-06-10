@@ -33,7 +33,7 @@ def dbtest():
     c = conn.cursor()
     
     #execute:実行する
-    c.execute("select name, address from users where id=1")
+    c.execute("select name, adress from users where id=1")
     
     #fitchome:フェッチ:実際に所得する
     user_info=c.fetchone()

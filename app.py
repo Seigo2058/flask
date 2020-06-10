@@ -12,7 +12,7 @@ def hello(text):
     return text + "さん、こんにちは"
 
 @app.route("/sample/<text>")
-def scholl(school_name):
+def school(school_name):
     school_name = "oasa"
     return render_template("test2.html",school_name = school_name)
 

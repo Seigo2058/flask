@@ -11,10 +11,10 @@ def index():
 def hello(text):
     return text + "さん、こんにちは"
 
-@app.route("/sample/<text>")
-def school(school_name):
-    school_name = "oasa"
-    return render_template("test2.html",school_name = school_name)
+# @app.route("/sample/<text>")
+# def school(school_name):
+#     school_name = "oasa"
+#     return render_template("test2.html",school_name = school_name)
 
 
 if __name__ == "__main__":

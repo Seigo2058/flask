@@ -52,7 +52,7 @@ def add():
     return render_template("add.html")
 
 #データを追加するボタンの処理
-@app.route("/add",methords=["POST"])
+@app.route("/add",methods=["POST"])
 def add_post():
     #add.htmlからfromのname="task"を取得
     task = request.form.get("task")

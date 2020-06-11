@@ -100,7 +100,9 @@ def edit(id):
     c.execute("select id ,task from task where  id = ?",(id,))
     task = c.fetchone()
     conn.close()
-    return render_template("/edit.html",task = task)
+    task = task[0]
+    item = {"id":id,"task":task}
+    return render_template("/edit.html",task = item)
 
 @app.route("/edit" , methods = ["POSt"])
 def update_task():

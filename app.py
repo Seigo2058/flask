@@ -89,7 +89,7 @@ def del_list(id):
     c.execute("delete from task where id =?",(id,))
     conn.commit()
     conn.close()
-    return redirect("list")
+    return redirect("/list")
 
 #編集機能(update)
 
@@ -104,7 +104,7 @@ def edit(id):
     item = {"id":id,"task":task}
     return render_template("edit.html",task = item)
 
-@app.route("/edit" , methods = ["POSt"])
+@app.route("/edit" , methods = ["POST"])
 def update_task():
     item_id = request.form.get("task_id")
     item_id = int(item_id)
@@ -112,7 +112,7 @@ def update_task():
     conn = sqlite3.connect("flask.db")
     c = conn.cursor()
     c.execute("update task set task = ? where id = ?",(task , item_id))
-    task = c.fetchone()
+    conn.commit()
     conn.close()
     return redirect("/list")
 

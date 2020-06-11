@@ -1,7 +1,7 @@
 #sqlite3を使えるようにする
 import sqlite3
 
-from flask import Flask , render_template , request
+from flask import Flask , render_template , request , redirect
 #flaskのflask,render_templateを使用します宣言
 app = Flask(__name__)
 

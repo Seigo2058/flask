@@ -86,7 +86,7 @@ def task_list():
 def del_list(id):
     conn=sqlite3.connect("flask.db")
     c=conn.cursor()
-    c.execute("")
+    c.execute("delete from task where id =?",(id,))
     conn.commit()
     conn.close()
     return reditrct("/list")

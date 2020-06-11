@@ -112,7 +112,7 @@ def update_task():
     c.execute("update task set task = ? where id = ?",(task , item_id))
     task = c.fetchone()
     conn.close()
-    return render_template("list")
+    return render_template("/list")
 
 
 

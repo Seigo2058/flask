@@ -21,7 +21,7 @@ def hello(text):
 
 @app.errorhandler(404)
 def notfound(code):
-    return "404ペーーーーージ"
+    return "404ペーーーーージ！"
 
 #2日目データベースの接続
 @app.route("/dbtest")
@@ -78,7 +78,7 @@ def task_list():
     for row in c.fetchall():
         task_list.append({"id":row[0], "task":row[1]})
     c.close()
-    return render_template("list.html" , task_list = task_list)
+    return render_template("task_list.html" , task_list = task_list)
 
 #データベースを消す変更を加える
 

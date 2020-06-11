@@ -67,6 +67,8 @@ def add_post():
     c.close()
     return "データを更新できました！"
 
+#3日目 listを表示
+
 @app.route("/list")
 def task_list():
     conn = sqlite3.connect("flask.db")
@@ -77,6 +79,8 @@ def task_list():
         task_list.append({"id":row[0], "task":row[1]})
     c.close()
     return render_template("list.html , task_list = task_list")
+
+#データベースを消す変更を加える
 
 @app.route("/del/<int:id>")
 def del_list(id):

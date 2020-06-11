@@ -57,8 +57,8 @@ def add_post():
     #add.htmlからfromのname="task"を取得
     task = request.form.get("task")
     #データベースに接続
-    conn=sqlite3.connect("flask.db")
-    c=conn.cursor()
+    conn = sqlite3.connect("flask.db")
+    c = conn.cursor()
     #(task,)のカンマは忘れずにね!ダブル型なので!
     #?に(task,)が入るよ
     #insert intoはデータを追加
@@ -84,8 +84,8 @@ def task_list():
 
 @app.route("/del/<int:id>")
 def del_list(id):
-    conn=sqlite3.connect("flask.db")
-    c=conn.cursor()
+    conn = sqlite3.connect("flask.db")
+    c = conn.cursor()
     c.execute("delete from task where id =?",(id,))
     conn.commit()
     conn.close()
@@ -93,7 +93,26 @@ def del_list(id):
 
 #編集機能(update)
 
+@app.route("/edit/<int:id>")
+def del_list(id):
+    conn = sqlite3.connect("flask.db")
+    c = conn.cursor()
+    c.execute("select id ,task from task where  id = ?",(id,))
+    task = c.fetchone()
+    conn.close()
+    return render_template("/edit.html",task = task)
 
+@app.route("/edit" , methods = ["POSt"])
+def update_task():
+    item_id = request.form.get("task_id")
+    item_id = int(item_id)
+    task = request.form.get("task")
+    conn = sqlite3.connect("flask.db")
+    c = conn.cursor()
+    c.execute("update task set task = ? where id = ?",(task , item_id))
+    task = c.fetchone()
+    conn.close()
+    return render_template("list")
 
 
 

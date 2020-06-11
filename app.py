@@ -89,7 +89,7 @@ def del_list(id):
     c.execute("delete from task where id =?",(id,))
     conn.commit()
     conn.close()
-    return reditrct("/list")
+    return redirect("/list")
 
 
 

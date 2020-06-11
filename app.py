@@ -78,7 +78,7 @@ def task_list():
     for row in c.fetchall():
         task_list.append({"id":row[0], "task":row[1]})
     c.close()
-    return render_template("list.html , task_list = task_list")
+    return render_template("list.html" , task_list = task_list)
 
 #データベースを消す変更を加える
 
@@ -89,12 +89,12 @@ def del_list(id):
     c.execute("delete from task where id =?",(id,))
     conn.commit()
     conn.close()
-    return redirect("/list")
+    return redirect("list")
 
 #編集機能(update)
 
 @app.route("/edit/<int:id>")
-def del_list(id):
+def edit(id):
     conn = sqlite3.connect("flask.db")
     c = conn.cursor()
     c.execute("select id ,task from task where  id = ?",(id,))

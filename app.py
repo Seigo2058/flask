@@ -102,7 +102,7 @@ def edit(id):
     conn.close()
     task = task[0]
     item = {"id":id,"task":task}
-    return render_template("/edit.html",task = item)
+    return render_template("edit.html",task = item)
 
 @app.route("/edit" , methods = ["POSt"])
 def update_task():
@@ -114,7 +114,7 @@ def update_task():
     c.execute("update task set task = ? where id = ?",(task , item_id))
     task = c.fetchone()
     conn.close()
-    return render_template("/list")
+    return redirect("/list")
 
 
 

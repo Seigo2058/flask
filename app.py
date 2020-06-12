@@ -116,7 +116,42 @@ def update_task():
     conn.close()
     return redirect("/list")
 
+#登録機能
 
+@app.route("/regist", methods = ["GET"])
+def regist_get():
+    return render_template("regist.html")
+
+@app.route("/regist",methods = ["POST"])
+def regist_post():
+    name = request.form.get("name")
+    password = request.form.get("pasword")
+    conn = sqlite3.connect("flask.db")
+    c = conn.cursor()
+    c.execute("insert into user value(null,?,?)",(name,password))
+    conn.commit()
+    conn.close()
+    return redirect("/login")
+
+#ログイン機能
+
+@app.route("/login",methods = ["GET"])
+def login_get():
+    return render_template("login.html")
+
+@app.route("/login" , methods = ["POST"])
+def login_post():
+    name = request.form.get("name")
+    password = request.form.get("password")
+    conn = sqlite3.connect("flask.db")
+    c = conn.cursor()
+    c.execute("")
+    user_password = c.fetchone()
+    conn.close()
+    if password == user_password:
+        return redirect("/list")
+    else:
+        return render_template("login.html")
 
 
 

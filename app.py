@@ -145,7 +145,7 @@ def login_post():
     password = request.form.get("password")
     conn = sqlite3.connect("flask.db")
     c = conn.cursor()
-    c.execute("")
+    c.execute("select password from user where name =?",(name,))
     user_password = c.fetchone()
     conn.close()
     if password == user_password:

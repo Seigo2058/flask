@@ -128,7 +128,7 @@ def regist_post():
     password = request.form.get("pasword")
     conn = sqlite3.connect("flask.db")
     c = conn.cursor()
-    c.execute("insert into user value(null,?,?)",(name,password))
+    c.execute("insert into user values(null,?,?)",(name,password))
     conn.commit()
     conn.close()
     return redirect("/login")
@@ -147,6 +147,7 @@ def login_post():
     c = conn.cursor()
     c.execute("select password from user where name =?",(name,))
     user_password = c.fetchone()
+    user_password = user_password[0]
     conn.close()
     if password == user_password:
         return redirect("/list")

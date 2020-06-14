@@ -1,9 +1,15 @@
 #sqlite3を使えるようにする
 import sqlite3
 
-from flask import Flask , render_template , request , redirect
+from flask import Flask , render_template , request , redirect , session
 #flaskのflask,render_templateを使用します宣言
 app = Flask(__name__)
+
+app.secret_key = "ddafopjadfas"
+
+@app.route("/")
+def top():
+    return redirect("/login")
 
 @app.route("/test")
 def index():
@@ -13,11 +19,6 @@ def index():
 @app.route("/greet/<text>")
 def hello(text):
     return text + "さん、こんにちは"
-
-# @app.route("/sample/<text>")
-# def school(school_name):
-#     school_name = "oasa"
-#     return render_template("test2.html",school_name = school_name)
 
 @app.errorhandler(404)
 def notfound(code):
@@ -54,67 +55,83 @@ def add():
 #データを追加するボタンの処理
 @app.route("/add",methods=["POST"])
 def add_post():
-    #add.htmlからfromのname="task"を取得
-    task = request.form.get("task")
-    #データベースに接続
-    conn = sqlite3.connect("flask.db")
-    c = conn.cursor()
-    #(task,)のカンマは忘れずにね!ダブル型なので!
-    #?に(task,)が入るよ
-    #insert intoはデータを追加
-    c.execute("insert into task values(null,?)",(task,))
-    conn.commit()
-    c.close()
-    return "データを更新できました！"
+    if "user_id" in session:
+        #add.htmlからfromのname="task"を取得
+        task = request.form.get("task")
+        #データベースに接続
+        conn = sqlite3.connect("flask.db")
+        c = conn.cursor()
+        #(task,)のカンマは忘れずにね!ダブル型なので!
+        #?に(task,)が入るよ
+        #insert intoはデータを追加
+        c.execute("insert into task values(null,?)",(task,))
+        conn.commit()
+        c.close()
+        return redirect("/list")
+    else:
+        return redirect("/login")
 
 #3日目 listを表示
 
 @app.route("/list")
 def task_list():
-    conn = sqlite3.connect("flask.db")
-    c = conn.cursor()
-    c.execute("select id ,task from task ")
-    task_list = []
-    for row in c.fetchall():
-        task_list.append({"id":row[0], "task":row[1]})
-    c.close()
-    return render_template("task_list.html" , task_list = task_list)
+    if "user_id" in session:
+        conn = sqlite3.connect("flask.db")
+        c = conn.cursor()
+        c.execute("select id ,task from task ")
+        task_list = []
+        for row in c.fetchall():
+            task_list.append({"id":row[0], "task":row[1]})
+        c.close()
+        return render_template("task_list.html" , task_list = task_list)
+    else:
+        return redirect("/login")
+
 
 #データベースを消す変更を加える
 
 @app.route("/del/<int:id>")
 def del_list(id):
-    conn = sqlite3.connect("flask.db")
-    c = conn.cursor()
-    c.execute("delete from task where id =?",(id,))
-    conn.commit()
-    conn.close()
-    return redirect("/list")
+    if "user_id" in session:
+        conn = sqlite3.connect("flask.db")
+        c = conn.cursor()
+        c.execute("delete from task where id =?",(id,))
+        conn.commit()
+        conn.close()
+        return redirect("/list")
+    else:
+        return redirect("/login")
 
 #編集機能(update)
 
 @app.route("/edit/<int:id>")
 def edit(id):
-    conn = sqlite3.connect("flask.db")
-    c = conn.cursor()
-    c.execute("select id ,task from task where  id = ?",(id,))
-    task = c.fetchone()
-    conn.close()
-    task = task[0]
-    item = {"id":id,"task":task}
-    return render_template("edit.html",task = item)
+    if "user_id" in session:
+        conn = sqlite3.connect("flask.db")
+        c = conn.cursor()
+        c.execute("select id ,task from task where  id = ?",(id,))
+        task = c.fetchone()
+        conn.close()
+        task = task[0]
+        item = {"id":id,"task":task}
+        return render_template("edit.html",task = item)
+    else:
+        return redirect("/login")
 
 @app.route("/edit" , methods = ["POST"])
 def update_task():
-    item_id = request.form.get("task_id")
-    item_id = int(item_id)
-    task = request.form.get("task")
-    conn = sqlite3.connect("flask.db")
-    c = conn.cursor()
-    c.execute("update task set task = ? where id = ?",(task , item_id))
-    conn.commit()
-    conn.close()
-    return redirect("/list")
+    if "user_id" in session:
+        item_id = request.form.get("task_id")
+        item_id = int(item_id)
+        task = request.form.get("task")
+        conn = sqlite3.connect("flask.db")
+        c = conn.cursor()
+        c.execute("update task set task = ? where id = ?",(task , item_id))
+        conn.commit()
+        conn.close()
+        return redirect("/list")
+    else:
+        return redirect("/login")
 
 #登録機能
 
@@ -152,6 +169,7 @@ def login_post():
     if password == user_password:
         return redirect("/list")
     else:
+        session["user_id"] = user_id[0]
         return render_template("login.html")
 
 

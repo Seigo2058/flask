@@ -177,5 +177,6 @@ def login_post():
 #ここから上に記述する
 if __name__ == "__main__":
     #サーバーを起動するよ
-    app.run(debug=True)
+    app.run(debug=True , host="0.0.0.0",port=888)
     #デバックモードを有効にするよ
+    # 192.168.0.22:888

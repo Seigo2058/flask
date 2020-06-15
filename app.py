@@ -48,14 +48,20 @@ def dbtest():
 
 
 #データベースを追加
-@app.route("/add")
+
+@app.route("/add",methods=["GET"])
 def add():
-    return render_template("add.html")
+    if "user_id" in session:
+        return render_template("add.html")
+    else:
+        return redirect("/login")
+
 
 #データを追加するボタンの処理
 @app.route("/add",methods=["POST"])
 def add_post():
     if "user_id" in session:
+        user_id = session["user_id"]
         #add.htmlからfromのname="task"を取得
         task = request.form.get("task")
         #データベースに接続
@@ -64,7 +70,7 @@ def add_post():
         #(task,)のカンマは忘れずにね!ダブル型なので!
         #?に(task,)が入るよ
         #insert intoはデータを追加
-        c.execute("insert into task values(null,?)",(task,))
+        c.execute("insert into task values(null,?,?)",(task,user_id))
         conn.commit()
         c.close()
         return redirect("/list")
@@ -76,9 +82,10 @@ def add_post():
 @app.route("/list")
 def task_list():
     if "user_id" in session:
+        user_id = session["user_id"]
         conn = sqlite3.connect("flask.db")
         c = conn.cursor()
-        c.execute("select id ,task from task ")
+        c.execute("select id ,task from task where user_id =?", (user_id,))
         task_list = []
         for row in c.fetchall():
             task_list.append({"id":row[0], "task":row[1]})
@@ -162,15 +169,19 @@ def login_post():
     password = request.form.get("password")
     conn = sqlite3.connect("flask.db")
     c = conn.cursor()
-    c.execute("select password from user where name =?",(name,))
-    user_password = c.fetchone()
-    user_password = user_password[0]
+    c.execute("select id from user where name = ? and password = ?",(name,))
+    user_id = c.fetchone()
     conn.close()
-    if password == user_password:
-        return redirect("/list")
-    else:
-        session["user_id"] = user_id[0]
+    if user_id is None:
         return render_template("login.html")
+    else:
+        session["user_id"] = user_id
+        return redirect("/list")
+    
+@app.route("/logout")
+def logout():
+    session.pop("user_id",None)
+    return redirect("/login")
 
 
 
